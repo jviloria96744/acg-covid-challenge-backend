@@ -26,7 +26,7 @@ def extract_data(environment, bucket, key, s3):
         logger.error(
             "Error with downloaded data sets, one or more data sets are empty")
         raise
-
+    
     try:
         prev_data = extract_previous_data(bucket, environment + '/' + key, s3)
     except:
