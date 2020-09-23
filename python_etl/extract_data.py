@@ -8,6 +8,26 @@ logger = logging.getLogger()
 
 
 def extract_data(environment, bucket, key, s3):
+    """
+    Parameters
+    ----------
+    environment: str in {'production', 'testing'} determines which download URLs to use and S3 key name
+
+    bucket: str, S3 Bucket Name used as "database" to store csv files in load step
+
+    key: str, Key that will be used to store csv file in S3 bucket, in this case, it is used to retrieve previous day's/run's data
+
+    s3: s3 Client 
+
+    Returns
+    ------
+    ny_times_data: DataFrame, downloaded NY Times Data
+
+    jh_data: DataFrame, downloaded Johns Hopkins Data
+
+    prev_data: DataFrame or None, previous day's/run's data retrieved from s3 Bucket.  On initial load of data, this will be None
+    """
+
     ny_times_url, jh_data_url = set_data_sources(environment)
 
     try:
@@ -39,6 +59,19 @@ def extract_data(environment, bucket, key, s3):
 
 
 def set_data_sources(environment):
+    """
+    Parameters
+    ----------
+    environment: str in {'production', 'testing'} determines which download URLs to use and S3 key name
+
+    Returns
+    ------
+    ny_times_url: str, NY Times Data download source
+
+    jh_data: str, Johns Hopkins Data download source
+
+    During testing, dummy data is used from a GitHub Gist
+    """
     if environment == "production":
         ny_times_url = os.environ["PROD_NYT_URL"]
         jh_data_url = os.environ["PROD_JH_URL"]
@@ -50,6 +83,20 @@ def set_data_sources(environment):
 
 
 def extract_previous_data(bucket, key, s3):
+    """
+    Parameters
+    ----------
+    bucket: str, S3 Bucket Name used as "database" to store csv files in load step
+
+    key: str, Key that will be used to store csv file in S3 bucket, in this case, it is used to retrieve previous day's/run's data
+
+    s3: s3 Client 
+
+    Returns
+    ------
+    prev_data: DataFrame or None, previous day's/run's data retrieved from s3 Bucket.  On initial load of data, this will be None
+    """
+
     try:
         res = s3.get_object(Bucket=bucket, Key=key)
         prev_data = pd.read_csv(res["Body"])

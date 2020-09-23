@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     event: dict, required
 
         keys:
-            environment: str in {'production', 'development'} determines which download URLs to use
+            environment: str in {'production', 'testing'} determines which download URLs to use
 
     context: object, required
         Lambda Context runtime methods and attributes

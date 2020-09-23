@@ -8,6 +8,24 @@ logger = logging.getLogger()
 
 
 def transform_data(ny_times_data, jh_data, prev_data):
+    """
+    Parameters
+    ----------
+    ny_times_data: DataFrame, downloaded NY Times Data
+
+    jh_data: DataFrame, downloaded Johns Hopkins Data
+
+    prev_data: DataFrame or None, previous day's/run's data retrieved from s3 Bucket.  On initial load of data, this will be None 
+
+    Returns
+    ------
+    covid_data: DataFrame, merged data filtered to US records with some derived fields added
+
+    new_records: List, list of dates that are newly added to the daily data set
+
+    updated_records: List, list of dates that were previously in the data set that have updated fields
+    """
+
     jh_data = filter_jh_data(jh_data)
 
     covid_data = merge_data(ny_times_data, jh_data)
@@ -43,6 +61,16 @@ def transform_data(ny_times_data, jh_data, prev_data):
 
 
 def filter_jh_data(jh_data):
+    """
+    Parameters
+    ----------
+    jh_data: DataFrame, downloaded Johns Hopkins Data
+
+    Returns
+    ------
+    jh_data: DataFrame, Johns Hopkins Data filtered to US records with only Date and Recovered fields
+    """
+
     try:
         jh_data = jh_data[jh_data["Country/Region"] == "US"]
         jh_data = jh_data[["Date", "Recovered"]]
@@ -62,6 +90,20 @@ def filter_jh_data(jh_data):
 
 
 def merge_data(nyt_data, jh_data):
+    """
+    Parameters
+    ----------
+    ny_times_data: DataFrame, downloaded NY Times Data
+
+    jh_data: DataFrame, Johns Hopkins Data filtered to US records with only Date and Recovered fields 
+
+    Returns
+    ------
+    covid_data: DataFrame, merged data with Johns Hopkins Date key removed and fields renamed
+        columns: "date", "cases", "deaths", "recoveries"
+
+    """
+
     try:
         covid_data = pd.merge(
             nyt_data, jh_data, left_on="date", right_on="Date")
@@ -83,6 +125,18 @@ def merge_data(nyt_data, jh_data):
 
 
 def check_count_validity(covid_data):
+    """
+    Parameters
+    ----------
+    covid_data: DataFrame, merged data with Johns Hopkins Date key removed and fields renamed
+        columns: "date", "cases", "deaths", "recoveries" 
+
+    Returns
+    ------
+    covid_data: DataFrame, input data with all numeric fields parsed to Integers
+
+    """
+
     for col in ["cases", "deaths", "recoveries"]:
         try:
             covid_data[col] = covid_data[col].apply(int)
@@ -99,6 +153,20 @@ def check_count_validity(covid_data):
 
 
 def get_changed_records(covid_data, prev_data):
+    """
+    Parameters
+    ----------
+    covid_data: DataFrame, merged data with all numeric fields parsed to Integers
+        columns: "date", "cases", "deaths", "recoveries"
+
+    Returns
+    ------
+    new_records: List, list of dates that are newly added to the daily data set
+
+    updated_records: List, list of dates that were previously in the data set that have updated fields
+
+    """
+
     for col in ["cases", "deaths", "recoveries"]:
         prev_data[col] = prev_data[col].apply(int)
 
@@ -124,6 +192,27 @@ def get_changed_records(covid_data, prev_data):
 
 
 def add_new_fields(covid_data):
+    """
+    Parameters
+    ----------
+    covid_data: DataFrame, merged data with all numeric fields parsed to Integers, and date field parsed to Date type
+        columns: "date", "cases", "deaths", "recoveries"
+
+    Returns
+    ------
+    covid_data: DataFrame, merged data with the following derived fields added
+        date-diff: Integer difference (days) in dates from record to record, used to detect dates where data wasn't reported
+
+        day_of_week: Day of week that date represents, used as control in dashboard
+
+        cases-diff: Incremental difference in cases from record to record
+
+        deaths-diff: Incremental difference in deaths from record to record
+
+        recoveries-diff: Incremental difference in recoveries from record to record
+
+    """
+
     day_of_week_dict = {
         0: "Monday",
         1: "Tuesday",
