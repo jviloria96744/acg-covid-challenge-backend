@@ -39,53 +39,19 @@ def test_extract_data_rows(mock_environment_variables):
         err_msg += 'NY Times data has no rows\n'
 
     if len(jh_data) == 0:
-        err_msg += 'Johns Hopkins data has no rows'
-
-    assert err_msg == ''
-
-
-@mock_s3
-def test_extract_data_types(mock_environment_variables):
-
-    s3 = boto3.client('s3')
-        
-    s3.create_bucket(
-        Bucket=BUCKET_NAME,
-        CreateBucketConfiguration={
-            'LocationConstraint': REGION,
-        },
-    )
-
-    nyt_data, jh_data, prev_data = extract_data.extract_data(ENVIRONMENT, BUCKET_NAME, PREV_DATA, s3)
-
-    # The assertion on the error message is used to make a failed test case more informative for troubleshooting
-    err_msg = ''
+        err_msg += 'Johns Hopkins data has no rows\n'
 
     if not isinstance(nyt_data, pd.DataFrame):
         err_msg += 'NY Times data is not a dataframe\n'
 
     if not isinstance(jh_data, pd.DataFrame):
-        err_msg += 'Johns Hopkins data is not a dataframe'
+        err_msg += 'Johns Hopkins data is not a dataframe\n'
+
+    if prev_data is not None:
+        err_msg += 'Previous data should be None Type\n'
 
 
-    assert err_msg == '' 
-
-
-@mock_s3
-def test_extract_data_no_prev_data(mock_environment_variables):
-
-    s3 = boto3.client('s3')
-        
-    s3.create_bucket(
-        Bucket=BUCKET_NAME,
-        CreateBucketConfiguration={
-            'LocationConstraint': REGION,
-        },
-    )
-
-    prev_data = extract_data.extract_data(ENVIRONMENT, BUCKET_NAME, PREV_DATA, s3)[2]
-
-    assert prev_data is None
+    assert err_msg == ''
 
 
 @mock_s3

@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     load_data(env, BUCKET_NAME, KEY, CHANGE_LOG,
               transformed_data, new_records, updated_records, s3)
 
-    if len(new_records) == len(transformed_data):
+    if prev_data is None:
         return {
             "Status": "New Data Loaded",
             "New Records": str(len(new_records)),

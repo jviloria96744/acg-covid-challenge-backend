@@ -42,6 +42,9 @@ def set_data_sources(environment):
     if environment == "production":
         ny_times_url = os.environ["PROD_NYT_URL"]
         jh_data_url = os.environ["PROD_JH_URL"]
+    else:
+        ny_times_url = os.environ["TEST_NYT_URL"]
+        jh_data_url = os.environ["TEST_JH_URL"]
 
     return ny_times_url, jh_data_url
 

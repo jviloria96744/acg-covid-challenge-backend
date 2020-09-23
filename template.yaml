@@ -45,6 +45,8 @@ Resources:
           PROD_JH_URL: "https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"
           PREV_DATA: "acg-covid-data.csv"
           CHANGE_LOG: "CHANGE_LOG.csv"
+          TEST_NYT_URL: "https://gist.githubusercontent.com/jviloria96744/c5b713facc72861a6facdb437667e937/raw/5c8da6b2fec7f18fc22c0067dbf7479a6ae49fcc/test_nyt_data.csv"
+          TEST_JH_URL: "https://gist.githubusercontent.com/jviloria96744/c5b713facc72861a6facdb437667e937/raw/5c8da6b2fec7f18fc22c0067dbf7479a6ae49fcc/test_jh_data.csv"
       Events:
         CWSchedule:
           Type: Schedule
