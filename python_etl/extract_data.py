@@ -47,12 +47,11 @@ def set_data_sources(environment):
 
 
 def extract_previous_data(bucket, key, s3):
-    items = s3.list_objects_v2(Bucket=bucket)
-
-    if "Contents" in items:
+    try:
         res = s3.get_object(Bucket=bucket, Key=key)
         prev_data = pd.read_csv(res["Body"])
-    else:
+    except:
         return None
 
     return prev_data
+    
