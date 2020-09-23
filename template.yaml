@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for Python ETL Process for NY Times/JHU COVID-19 Data
+  Project is for ACloudGuru September Challenge
+
+Globals:
+  Function:
+    Timeout: 60
+
+Resources:
+  DBBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+
+  DBUpdateTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: jviloria96744@gmail.com
+          Protocol: "email"
+
+  PythonEtlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: python_etl/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      MemorySize: 256
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref DBBucket
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref DBUpdateTopic
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DBBucket
+          PROD_NYT_URL: "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv"
+          PROD_JH_URL: "https://raw.githubusercontent.com/datasets/covid-19/master/data/time-series-19-covid-combined.csv"
+          PREV_DATA: "acg-covid-data.csv"
+          CHANGE_LOG: "CHANGE_LOG.csv"
+      Events:
+        CWSchedule:
+          Type: Schedule
+          Input: '{"environment": "production"}'
+          Properties:
+            Schedule: "cron(0 21 * * ? *)"
+            Description: Daily scheduling to download COVID-19 data from NY Times and JHU Sources
+            Enabled: False
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 60
+        MaximumRetryAttempts: 0
+        DestinationConfig:
+          OnSuccess:
+            Type: SNS
+            Destination: !Ref DBUpdateTopic
+          OnFailure:
+            Type: SNS
+            Destination: !Ref DBUpdateTopic
+
+Outputs:
+  PythonEtlFunction:
+    Description: "Python ETL Function ARN"
+    Value: !GetAtt PythonEtlFunction.Arn
+  PythonEtlFunctionIamRole:
+    Description: "Implicit IAM Role created for Python ETL Function"
+    Value: !GetAtt PythonEtlFunctionRole.Arn
+  EtlDatabaseBucket:
+    Description: "Python ETL S3 Bucket Name"
+    Value: !Ref DBBucket

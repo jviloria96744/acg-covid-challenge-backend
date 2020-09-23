@@ -1,0 +1,334 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:load_data.setup_logging (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "load_data.setup_logging"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:load_data.upload_data_to_s3 (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "load_data.upload_data_to_s3"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:load_data.create_change_log (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "load_data.create_change_log"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.load_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.load_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:load_data.load_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "load_data.load_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:extract_data.setup_logging (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "extract_data.setup_logging"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:extract_data.extract_previous_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "extract_data.extract_previous_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:extract_data.set_data_sources (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "extract_data.set_data_sources"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:extract_data.extract_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "extract_data.extract_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.extract_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.extract_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.setup_logging (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.setup_logging"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:json_logger.setup_logging (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "json_logger.setup_logging"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.setup_logging (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.setup_logging"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.get_changed_records (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.get_changed_records"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.add_new_fields (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.add_new_fields"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.check_count_validity (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.check_count_validity"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.merge_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.merge_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.filter_jh_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.filter_jh_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.lambda_handler (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.lambda_handler"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.data_extract (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.data_extract"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:app.transform_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "app.transform_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "etl:transform_data.transform_data (python3.8)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "python_etl",
+                "lambdaHandler": "transform_data.transform_data"
+            },
+            "lambda": {
+                "runtime": "python3.8",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        }
+    ]
+}
