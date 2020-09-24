@@ -38,6 +38,8 @@ Resources:
       Environment:
         Variables:
           TOPIC_ARN: !Ref DBUpdateTopic
+      EventInvokeConfig:
+        MaximumRetryAttempts: 0
 
   PythonEtlFunction:
     Type: AWS::Serverless::Function
