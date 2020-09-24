@@ -179,56 +179,6 @@ def test_data_validity_negative(body, neg_merged_data):
             neg_merged_data[body])
 
 
-def test_transform_data(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert covid_data.loc[1, "cases-diff"] == 1
-
-
-def test_transform_data_day_of_week(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert covid_data.loc[0, "day_of_week"] == "Thursday"
-
-
-def test_transform_data_date_type(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert isinstance(covid_data.loc[0, "date"], datetime.date)
-
-
-def test_transform_data_column_names(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert list(covid_data.columns) == ['date', 'cases', 'deaths', 'recoveries',
-                                        'date-diff', 'day_of_week', 'cases-diff', 'deaths-diff', 'recoveries-diff']
-
-
-def test_transform_data_row_count(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert len(covid_data) == 2
-
-
-def test_transform_data_new_record_count(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert len(new_records) == 2
-
-
-def test_transform_data_updated_record_count(base_nyt_data, base_jh_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, None)
-
-    assert len(updated_records) == 0
-
-
 @pytest.fixture()
 def prev_data():
     prev_data_dict = {
@@ -246,15 +196,64 @@ def prev_data():
     return pd.DataFrame(data=prev_data_dict)
 
 
-def test_transform_data_new_record_count_prev_data(base_nyt_data, base_jh_data, prev_data):
+@pytest.fixture
+def transform_output(base_nyt_data, base_jh_data, prev_data):
+    output = {}
+
+    covid_data, new_records, updated_records = transform_data.transform_data(
+        base_nyt_data, base_jh_data, None)
+
+    output["no_prev_data"] = {
+        "covid_data": covid_data,
+        "new_records": new_records,
+        "updated_records": updated_records
+    }
+
     covid_data, new_records, updated_records = transform_data.transform_data(
         base_nyt_data, base_jh_data, prev_data)
 
-    assert len(new_records) == 1
+    output["with_prev_data"] = {
+        "covid_data": covid_data,
+        "new_records": new_records,
+        "updated_records": updated_records
+    }
+
+    return output
 
 
-def test_transform_data_updated_record_count_prev_data(base_nyt_data, base_jh_data, prev_data):
-    covid_data, new_records, updated_records = transform_data.transform_data(
-        base_nyt_data, base_jh_data, prev_data)
+def test_transform_data(transform_output):
+    assert transform_output["no_prev_data"]["covid_data"].loc[1, "cases-diff"] == 1
 
-    assert len(updated_records) == 1
+
+def test_transform_data_day_of_week(transform_output):
+    assert transform_output["no_prev_data"]["covid_data"].loc[0, "day_of_week"] == "Thursday"
+
+
+def test_transform_data_date_type(transform_output):
+    assert isinstance(transform_output["no_prev_data"]["covid_data"].loc[0, "date"], datetime.date)
+
+
+def test_transform_data_column_names(transform_output):
+    test_columns = ['date', 'cases', 'deaths', 'recoveries',
+                    'date-diff', 'month', 'day_of_week', 'cases-diff', 'deaths-diff', 'recoveries-diff']
+    assert list(transform_output["no_prev_data"]["covid_data"].columns) == test_columns
+
+
+def test_transform_data_row_count(transform_output):
+    assert len(transform_output["no_prev_data"]["covid_data"]) == 2
+
+
+def test_transform_data_new_record_count(transform_output):
+    assert len(transform_output["no_prev_data"]["new_records"]) == 2
+
+
+def test_transform_data_updated_record_count(transform_output):
+    assert len(transform_output["no_prev_data"]["updated_records"]) == 0
+
+
+def test_transform_data_new_record_count_prev_data(transform_output):
+    assert len(transform_output["with_prev_data"]["new_records"]) == 1
+
+
+def test_transform_data_updated_record_count_prev_data(transform_output):
+    assert len(transform_output["with_prev_data"]["updated_records"]) == 1

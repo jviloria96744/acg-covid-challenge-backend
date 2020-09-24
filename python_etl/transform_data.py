@@ -223,10 +223,26 @@ def add_new_fields(covid_data):
         6: "Sunday",
     }
 
+    month_dict = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September",
+        10: "October",
+        11: "November",
+        12: "December",
+    }
+
     covid_data["date-diff"] = covid_data["date"].diff()
     covid_data.loc[0, "date-diff"] = pd.Timedelta(value=0, unit="days")
     covid_data["date-diff"] = covid_data["date-diff"].apply(lambda x: x.days)
 
+    covid_data["month"] = covid_data["date"].apply(lambda x: month_dict[x.month])
     covid_data["day_of_week"] = covid_data["date"].apply(
         lambda x: day_of_week_dict[x.weekday()])
 

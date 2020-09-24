@@ -46,7 +46,7 @@ Resources:
       Protocol: sqs
       FilterPolicy:
         environment:
-          - production
+          - testing
 
   QueuePolicy:
     Type: AWS::SQS::QueuePolicy
