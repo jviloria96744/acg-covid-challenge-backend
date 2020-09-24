@@ -26,6 +26,19 @@ Resources:
         - Endpoint: jviloria96744@gmail.com
           Protocol: "email"
 
+  SNSLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: sns_lambda/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref DBUpdateTopic
+      Environment:
+        Variables:
+          TOPIC_ARN: !Ref DBUpdateTopic
+
   PythonEtlFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -36,8 +49,8 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref DBBucket
-        - SNSPublishMessagePolicy:
-            TopicName: !Ref DBUpdateTopic
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SNSLambdaFunction
       Environment:
         Variables:
           BUCKET_NAME: !Ref DBBucket
@@ -60,11 +73,11 @@ Resources:
         MaximumRetryAttempts: 0
         DestinationConfig:
           OnSuccess:
-            Type: SNS
-            Destination: !Ref DBUpdateTopic
+            Type: Lambda
+            Destination: !GetAtt SNSLambdaFunction.Arn
           OnFailure:
-            Type: SNS
-            Destination: !Ref DBUpdateTopic
+            Type: Lambda
+            Destination: !GetAtt SNSLambdaFunction.Arn
 
 Outputs:
   PythonEtlFunction:
