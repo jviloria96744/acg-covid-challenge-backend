@@ -75,9 +75,12 @@ def set_data_sources(environment):
     if environment == "production":
         ny_times_url = os.environ["PROD_NYT_URL"]
         jh_data_url = os.environ["PROD_JH_URL"]
-    else:
+    elif environment == "testing":
         ny_times_url = os.environ["TEST_NYT_URL"]
         jh_data_url = os.environ["TEST_JH_URL"]
+    else:
+        logger.error("Invalid environment")
+        raise Exception
 
     return ny_times_url, jh_data_url
 
