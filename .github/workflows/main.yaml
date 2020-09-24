@@ -4,7 +4,7 @@ on:
     paths:
       - "python_etl/**"
       - "template.yaml"
-      - ".github/workflows/main.yml"
+      - ".github/**"
       - "tests/**"
 jobs:
   build:
