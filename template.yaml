@@ -33,6 +33,39 @@ Resources:
           - testing
           - production
 
+  SmokeTestQueue:
+    Type: AWS::SQS::Queue
+
+  SmokeTestTopicSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref DBUpdateTopic
+      Endpoint: !GetAtt
+        - SmokeTestQueue
+        - Arn
+      Protocol: sqs
+      FilterPolicy:
+        environment:
+          - production
+
+  QueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+          Sid: allow-sns-to-send-message-to-sqs
+          Effect: Allow
+          Principal:
+            Service: sns.amazonaws.com
+          Action:
+            - sqs:SendMessage
+          Resource: !GetAtt SmokeTestQueue.Arn
+          Condition:
+            ArnEquals:
+              aws:SourceArn: !Ref DBUpdateTopic
+      Queues:
+        - !Ref SmokeTestQueue
+
   SNSLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:

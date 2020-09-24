@@ -15,6 +15,8 @@ def create_message(payload, event_status, environment):
         subject = "COVID-19 ETL Process Unsuccessful"
 
     return message, subject
+
+
 def lambda_handler(event, context):
     """
     Parameters
