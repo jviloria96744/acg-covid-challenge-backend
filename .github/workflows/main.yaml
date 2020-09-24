@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - "python_etl/**"
+      - "sns_lambda/**"
       - "template.yaml"
       - ".github/**"
       - "tests/**"
