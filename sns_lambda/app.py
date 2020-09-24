@@ -1,6 +1,19 @@
 import os
 import boto3
 
+sns = boto3.client('sns')
+SNS_TOPIC_ARN = os.environ["TOPIC_ARN"]
+
+
+def create_message(payload, event_status):
+    if event_status == 'Success':
+        message = f"{payload["Status"]}\nNumber of New Records: {payload["New Records"]}\nNumber of Updated Records: {payload["Updated Records"]}"
+        subject = "COVID-19 ETL Process Successful, Data Updated"
+    else:
+        message = "An error occured in the COVID-19 ETL Process"
+        subject = "COVID-19 ETL Process Unsuccessful"
+
+    return message, subject
 def lambda_handler(event, context):
     """
     Parameters
@@ -16,8 +29,12 @@ def lambda_handler(event, context):
     Invocation is Asynchronous
     """
 
-    print(event)
+    event_payload = event["responsePayload"] 
+
+    message, subject = create_message(event_payload, event["requestContext"]["condition"])
+
+    sns.publish(TopicArn=SNS_TOPIC_ARN, Message=message, Subject=subject)        
 
     return {
-        "Hello"
+        "Message": "Lambda Invoked"
     }
