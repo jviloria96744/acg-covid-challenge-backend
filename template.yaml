@@ -21,10 +21,16 @@ Resources:
 
   DBUpdateTopic:
     Type: AWS::SNS::Topic
+
+  SNSTopicSubscription:
+    Type: "AWS::SNS::Subscription"
     Properties:
-      Subscription:
-        - Endpoint: jviloria96744@gmail.com
-          Protocol: "email"
+      TopicArn: !Ref DBUpdateTopic
+      Endpoint: jviloria96744@gmail.com
+      Protocol: email
+      FilterPolicy:
+        environment:
+          - development
 
   SNSLambdaFunction:
     Type: AWS::Serverless::Function
