@@ -6,7 +6,7 @@ SNS_TOPIC_ARN = os.environ["TOPIC_ARN"]
 
 
 def create_message(payload, event_status, environment):
-    print(type(payload))
+    
     if event_status == 'Success':
         message = f"Environment: {environment}\n{payload['Status']}\nNumber of New Records: {payload['New Records']}\nNumber of Updated Records: {payload['Updated Records']}"
         subject = "COVID-19 ETL Process Successful, Data Updated"

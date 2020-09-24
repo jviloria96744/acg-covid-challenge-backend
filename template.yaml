@@ -30,7 +30,8 @@ Resources:
       Protocol: email
       FilterPolicy:
         environment:
-          - development
+          - testing
+          - production
 
   SNSLambdaFunction:
     Type: AWS::Serverless::Function
