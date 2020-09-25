@@ -81,6 +81,26 @@ Resources:
       EventInvokeConfig:
         MaximumRetryAttempts: 0
 
+  CovidApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: covid_api/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref DBBucket
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref DBBucket
+          KEY_NAME: "production/acg-covid-data.csv"
+      Events:
+        CovidDataApi:
+          Type: Api
+          Properties:
+            Path: /covid_data
+            Method: get
+
   PythonEtlFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -134,3 +154,6 @@ Outputs:
   SmokeTestQueue:
     Description: "SQS Queue URL used for smoke testing in CI/CD Workflow"
     Value: !Ref SmokeTestQueue
+  CovidDataApi:
+    Description: "API Gateway endpoint URL for Prod stage for COVID-19 Data"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/covid_data/"
