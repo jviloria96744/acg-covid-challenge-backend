@@ -29,3 +29,5 @@ jobs:
         run: sam build --use-container
       - name: Deploy Resources
         run: sam deploy --stack-name python-etl-challenge --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }} --s3-bucket ${{ secrets.AWS_S3_SAM_BUCKET }} --no-fail-on-empty-changeset
+      # - name: Smoke Test
+      #   run: python3 tests/smoke_test.py
