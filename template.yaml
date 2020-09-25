@@ -131,3 +131,6 @@ Outputs:
   EtlDatabaseBucket:
     Description: "Python ETL S3 Bucket Name"
     Value: !Ref DBBucket
+  SmokeTestQueue:
+    Description: "SQS Queue URL used for smoke testing in CI/CD Workflow"
+    Value: !Ref SmokeTestQueue
