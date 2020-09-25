@@ -124,7 +124,7 @@ Resources:
 Outputs:
   PythonEtlFunction:
     Description: "Python ETL Function ARN"
-    Value: !GetAtt PythonEtlFunction.Arn
+    Value: !Ref PythonEtlFunction
   PythonEtlFunctionIamRole:
     Description: "Implicit IAM Role created for Python ETL Function"
     Value: !GetAtt PythonEtlFunctionRole.Arn
