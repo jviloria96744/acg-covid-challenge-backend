@@ -7,7 +7,7 @@ from json_logger import setup_logging
 setup_logging(logging.INFO)
 logger = logging.getLogger()
 
-s3 = boto3.client(s3)
+s3 = boto3.client('s3')
 BUCKET_NAME = os.environ["BUCKET_NAME"]
 KEY_NAME = os.environ["KEY_NAME"]
 
