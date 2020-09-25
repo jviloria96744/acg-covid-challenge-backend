@@ -23,7 +23,7 @@ jobs:
           python-version: "3.8"
       - name: Run Unit Tests
         run: |
-          pip3 install pytest boto3 moto[s3, sns] pandas
+          pip3 install pytest boto3 moto pandas
           pytest -v
       - name: Build Project Artifact
         run: sam build --use-container
