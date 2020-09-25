@@ -59,7 +59,7 @@ def invoke_test_lambda(lambda_name):
             """
     )
 
-    
+
 def get_sqs_message(queue_url):
     wait_index = 0
 
@@ -75,7 +75,7 @@ def get_sqs_message(queue_url):
 
             break
         except KeyError:
-            time.sleep((2**wait_index))
+            time.sleep(max((2**wait_index), 10))
             wait_index += 1
 
     return message, message_receipt_handle, environment
