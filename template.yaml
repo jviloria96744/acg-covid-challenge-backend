@@ -109,7 +109,7 @@ Resources:
           Properties:
             Schedule: "cron(0 21 * * ? *)"
             Description: Daily scheduling to download COVID-19 data from NY Times and JHU Sources
-            Enabled: False
+            Enabled: True
       EventInvokeConfig:
         MaximumEventAgeInSeconds: 60
         MaximumRetryAttempts: 0
