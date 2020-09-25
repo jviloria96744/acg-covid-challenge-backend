@@ -4,6 +4,7 @@ on:
     paths:
       - "python_etl/**"
       - "sns_lambda/**"
+      - "covid_api/**"
       - "template.yaml"
       - ".github/**"
       - "tests/**"
