@@ -11,11 +11,15 @@ lambda_client = boto3.client("lambda")
 def run_smoke_test():
     BUCKET_NAME, QUEUE_URL, LAMBDA_NAME = get_cloudformation_outputs("python-etl-challenge")
 
+    invoke_test_lambda(LAMBDA_NAME)
+
     message, message_receipt_handle, environment = get_sqs_message(QUEUE_URL)
 
     test_message = "Environment: testing\nNew Data Loaded\nNumber of New Records: 3\nNumber of Updated Records: --"
 
     if message == test_message:
+        print("Smoke Test Passed, Removing Test Objects")
+
         testing_objects = [
             {
                 'Key': f'{environment}/acg-covid-data.csv'
@@ -24,10 +28,13 @@ def run_smoke_test():
                 'Key': f'{environment}/CHANGE_LOG.csv'
             }
         ]
+
+        print("Deleting Test Objects From S3")
         res = s3.delete_objects(Bucket=BUCKET_NAME, Delete={'Objects': testing_objects})
         if len(res["Deleted"]) != len(testing_objects):
             raise Exception
 
+        print("Deleting SQS Message From Queue")
         sqs.delete_message(QueueUrl=QUEUE_URL, ReceiptHandle=message_receipt_handle)
     else:
         raise Exception
@@ -35,6 +42,7 @@ def run_smoke_test():
 
 def get_cloudformation_outputs(stackname):
 
+    print("Getting CloudFormation Outputs")
     response = cfn.describe_stacks(StackName=stackname)
     outputs = response["Stacks"][0]["Outputs"]
 
@@ -50,6 +58,7 @@ def get_cloudformation_outputs(stackname):
 
 
 def invoke_test_lambda(lambda_name):
+    print("Invoking Lambda Function")
     lambda_client.invoke(
         FunctionName=lambda_name,
         InvocationType='Event',
@@ -61,10 +70,12 @@ def invoke_test_lambda(lambda_name):
 
 
 def get_sqs_message(queue_url):
+    
     wait_index = 0
 
     while True:
         try:
+            print(f"Polling SQS, Attempt {wait_index + 1}")
             res = sqs.receive_message(QueueUrl=queue_url)
             message = json.loads(res["Messages"][0]["Body"])
             message_receipt_handle = res["Messages"][0]["ReceiptHandle"]
@@ -73,20 +84,18 @@ def get_sqs_message(queue_url):
 
             message = message["Message"]
 
+            print("Message Received")
+
             break
         except KeyError:
-            time.sleep(max((2**wait_index), 10))
+            time.sleep(20)
             wait_index += 1
 
+            if wait_index == 10:
+                print("Timeout Error with SQS Message Polling")
+                raise Exception
+
     return message, message_receipt_handle, environment
-
-
-def verify_message(message):
-    test_message = """
-    Something
-    """
-
-    return message.strip() == test_message.strip()
 
 
 run_smoke_test()
