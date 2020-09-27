@@ -7,6 +7,22 @@ Description: >
 Globals:
   Function:
     Timeout: 60
+  Api:
+    Auth:
+      ApiKeyRequired: false
+      UsagePlan:
+        CreateUsagePlan: PER_API
+        Throttle:
+          BurstLimit: 10
+          RateLimit: 3
+    Domain:
+      DomainName: api.jviloria.com
+      CertificateArn: '{{resolve:ssm:api-jviloria-cert-arn:1}}'
+      EndpointConfiguration: EDGE
+      Route53:
+        HostedZoneId: '{{resolve:ssm:jviloria-r53-hostedId:1}}'
+      BasePath:
+        - /covid19-etl-challenge
 
 Resources:
   DBBucket:
@@ -125,11 +141,12 @@ Resources:
       Events:
         CWSchedule:
           Type: Schedule
-          Input: '{"environment": "production"}'
           Properties:
-            Schedule: "cron(0 21 * * ? *)"
+            Schedule: "rate(3 minutes)"
+            # Schedule: "cron(0 21 * * ? *)"
             Description: Daily scheduling to download COVID-19 data from NY Times and JHU Sources
             Enabled: True
+            Input: '{"environment": "production"}'
       EventInvokeConfig:
         MaximumEventAgeInSeconds: 60
         MaximumRetryAttempts: 0
