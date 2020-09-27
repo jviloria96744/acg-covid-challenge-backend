@@ -22,7 +22,7 @@ Globals:
       Route53:
         HostedZoneId: '{{resolve:ssm:jviloria-r53-hostedId:1}}'
       BasePath:
-        - /covid19-etl-challenge
+        - /covid19etlchallenge
 
 Resources:
   DBBucket:
@@ -142,8 +142,7 @@ Resources:
         CWSchedule:
           Type: Schedule
           Properties:
-            Schedule: "rate(3 minutes)"
-            # Schedule: "cron(0 21 * * ? *)"
+            Schedule: "cron(0 21 * * ? *)"
             Description: Daily scheduling to download COVID-19 data from NY Times and JHU Sources
             Enabled: True
             Input: '{"environment": "production"}'
