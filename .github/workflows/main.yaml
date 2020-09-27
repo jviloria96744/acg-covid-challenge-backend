@@ -2,9 +2,7 @@ name: Python ETL Challenge CI/CD Back-End
 on:
   push:
     paths:
-      - "python_etl/**"
-      - "sns_lambda/**"
-      - "covid_api/**"
+      - "lambdas/**"
       - "template.yaml"
       - ".github/**"
       - "tests/**"

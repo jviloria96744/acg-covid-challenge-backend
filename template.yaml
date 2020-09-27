@@ -85,7 +85,7 @@ Resources:
   SNSLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: sns_lambda/
+      CodeUri: lambdas/sns_lambda/
       Handler: app.lambda_handler
       Runtime: python3.8
       Policies:
@@ -100,7 +100,7 @@ Resources:
   CovidApiFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: covid_api/
+      CodeUri: lambdas/covid_api/
       Handler: app.lambda_handler
       Runtime: python3.8
       Policies:
@@ -120,7 +120,7 @@ Resources:
   PythonEtlFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: python_etl/
+      CodeUri: lambdas/python_etl/
       Handler: app.lambda_handler
       Runtime: python3.8
       MemorySize: 256
