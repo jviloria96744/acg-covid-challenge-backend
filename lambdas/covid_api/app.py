@@ -34,9 +34,10 @@ def get_covid_data():
         OutputSerialization={"JSON": {}},
     )
 
+    records = ''
     for event in res["Payload"]:
         if "Records" in event:
-            records = event["Records"]["Payload"].decode("utf-8")
+            records += event["Records"]["Payload"].decode("utf-8")
 
     records = [json.loads(record) for record in records.split("\n") if len(record) > 0]
     
