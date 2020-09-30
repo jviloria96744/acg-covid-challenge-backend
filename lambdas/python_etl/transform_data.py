@@ -1,5 +1,6 @@
 from datetime import date
 import logging
+import math
 import pandas as pd
 from json_logger import setup_logging
 
@@ -250,5 +251,6 @@ def add_new_fields(covid_data):
         covid_data[f"{col}-diff"] = covid_data[col].diff()
         covid_data.loc[0, f"{col}-diff"] = 0
         covid_data[f"{col}-diff"] = covid_data[f"{col}-diff"].apply(int)
+        covid_data[f"{col}-log"] = covid_data[col].apply(lambda x: math.log(x) if x > 0 else 0)
 
     return covid_data

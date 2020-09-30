@@ -189,8 +189,11 @@ def prev_data():
         "date-diff": [0],
         "day_of_week": ["Wednesday"],
         "cases-diff": [0],
+        "cases-log": [0],
         "deaths-diff": [0],
-        "recoveries-diff": [0]
+        "deaths-log": [0],
+        "recoveries-diff": [0],
+        "recoveries-log": [0]
     }
 
     return pd.DataFrame(data=prev_data_dict)
@@ -235,7 +238,7 @@ def test_transform_data_date_type(transform_output):
 
 def test_transform_data_column_names(transform_output):
     test_columns = ['date', 'cases', 'deaths', 'recoveries',
-                    'date-diff', 'month', 'day_of_week', 'cases-diff', 'deaths-diff', 'recoveries-diff']
+                    'date-diff', 'month', 'day_of_week', 'cases-diff', 'cases-log', 'deaths-diff', 'deaths-log', 'recoveries-diff', 'recoveries-log']
     assert list(transform_output["no_prev_data"]["covid_data"].columns) == test_columns
 
 

@@ -22,10 +22,10 @@ def run_smoke_test():
 
         testing_objects = [
             {
-                'Key': f'{environment}/acg-covid-data.csv'
+                'Key': 'testing/acg-covid-data.csv'
             },
             {
-                'Key': f'{environment}/CHANGE_LOG.csv'
+                'Key': 'testing/CHANGE_LOG.csv'
             }
         ]
 
